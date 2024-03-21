@@ -1,4 +1,5 @@
 -- Create a stored procedure that adds a new correction for a student
+DELIMITER //
 CREATE PROCEDURE AddBonus (IN p_user_id INT, IN p_project_name VARCHAR(255), IN p_score INT)
 BEGIN
 	DECLARE project_id INT;
