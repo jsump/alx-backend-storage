@@ -2,7 +2,7 @@
 """
 Module: 12-log_stats.py
 
-This module contains a fucntion that provides some stats abount Ngix
+This module contains a fucntion that provides some stats about Ngix
 stored in MongoDB
 """
 
