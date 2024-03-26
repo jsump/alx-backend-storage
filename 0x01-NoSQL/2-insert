@@ -2,4 +2,4 @@
 // The document must have one attribute name with alue "Holberton school"
 // The database name will be passed as option of mongo command
 use <DB_NAME>
-db.school.insertOne({ name: "Holberton school:" })
+db.school.insertOne({ name: "Holberton school" })
