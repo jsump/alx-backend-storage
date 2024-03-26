@@ -1,0 +1,2 @@
+// Display the number of dicuments in the collection school
+db.school.countDocuments({})
