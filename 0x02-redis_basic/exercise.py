@@ -41,7 +41,23 @@ class Cache:
             self._redis.incr(key)
             return method(self, *args, **kwargs)
         return wrapper
-    
+
+    def call_history(method: Callable) -> Callable:
+        """
+        This method stored the history of inputs and outputs
+        for a particular function
+        """
+        @functools.wraps(method)
+        def wrapper(self, *args, **kwargs):
+            """wrapper"""
+            input_key = method.__qualname__ + ":inputs"
+            output_key = method.__qualname__ + ":outputs"
+            self._redis.rpush(input_key, str(args))
+            result = method(self, *args, **kwargs)
+            self._redis.rpush(output_key, str(result))
+            return result
+        return wrapper
+
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
