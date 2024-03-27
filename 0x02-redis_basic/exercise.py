@@ -38,7 +38,5 @@ class Cache:
         and return key.
         """
         key = str(uuid.uuid4())
-        if not isinstance(data, str):
-            data = pickle.dumps(data)
         self._redis.set(key, data)
         return key
