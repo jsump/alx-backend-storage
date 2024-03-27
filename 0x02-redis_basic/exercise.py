@@ -9,6 +9,7 @@ This module contains a class Cache.
 import uuid
 import redis
 import pickle
+import functools
 from typing import Union, Callable
 
 
@@ -28,6 +29,20 @@ class Cache:
         self._redis: redis.Redis = redis.Redis()
         self._redis.flushdb()
 
+    def count_calls(method: Callable) -> Callable:
+        """
+        This method implements a system to count how mnay times
+        methods of the Cache class are called
+        """
+        @functools.wraps(method)
+        def wrapper(self, *args, **kwargs):
+            """ wrapper """
+            key = method.__qualname__
+            self._redis.incr(key)
+            return method(self, *args, **kwargs)
+        return wrapper
+    
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         This method takes a data argument and returns a string.
