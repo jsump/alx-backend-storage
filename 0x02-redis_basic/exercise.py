@@ -94,6 +94,19 @@ class Cache:
         """
         return self.get(key, fn=int)
 
+    def replay(self, method: Callable) -> None:
+        """Replay"""
+        input_key = method.__qualname__ + ":inputs"
+        output_key = method.__qualname__ + ":output"
+        inputs = self._redis.lrange(input_key, 0, -1)
+        outputs = self._redis.lrange(output_key, 0, -1)
+
+        print(f"{method.__qualname__} was called {len(inputs)} times:")
+        for input_args, output in zip(inputs, outputs):
+            print(f"{method.__qualname__}(
+            *{input_args.decode('utf-8')}
+            ) -> {output.decode('utf-8')}")
+
 
 cache = Cache()
 
