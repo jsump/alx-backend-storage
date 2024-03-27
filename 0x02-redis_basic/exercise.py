@@ -72,7 +72,8 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Callable = None) -> Union[str, bytes, int, float]:
+    def get(self, key: str, fn: Callable = None) -> Union[
+            str, bytes, int, float]:
         """
         This method takes a key string argument and an optiional
         Callable argument named fn.
@@ -103,9 +104,8 @@ class Cache:
 
         print(f"{method.__qualname__} was called {len(inputs)} times:")
         for input_args, output in zip(inputs, outputs):
-            print(f"{method.__qualname__}(
-            *{input_args.decode('utf-8')}
-            ) -> {output.decode('utf-8')}")
+            print(f"{method.__qualname__}(*{input_args.decode('utf-8')}) -> "
+                  f"{output.decode('utf-8')}")
 
 
 cache = Cache()
