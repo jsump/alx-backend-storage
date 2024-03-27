@@ -2,7 +2,7 @@
 """
 Module: web.py
 
-This module wikk implement an expiring web cache and tracker
+This module will implement an expiring web cache and tracker
 """
 
 
@@ -12,7 +12,7 @@ import time
 from typing import Callable
 
 
-redis_clent = redis.Redis()
+redis_client = redis.Redis()
 
 
 def get_page(url: str) -> str:
@@ -27,15 +27,24 @@ def get_page(url: str) -> str:
     else:
         access_count = int(access_count) + 1
 
-    page_content = requests.get(url).text
+    try:
+        response = requests.get(url)
+        page_content = response.text
+    except Exception as e:
+        print(f"Failed to get URL: {url}. Error: {e}")
+        return ""
+
+    response.close()
+
     redis_client.setex(count_key, 10, access_count)
 
     return page_content
 
 
-url = "http://slowwly.robertomurray.co.uk"
-print(get_page(url))
-
-time.sleep(10)
-
-print(get_page(url))
+if __name__ == "__main__":
+    url = "http://slowwly.robertomurray.co.uk"
+    print(get_page(url))
+    
+    time.sleep(10)
+    
+    print(get_page(url))
