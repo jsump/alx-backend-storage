@@ -21,6 +21,14 @@ class Cache:
 
     _redis: private variable
     """
+    def __init__(self) -> None:
+        """
+        This mehod stores an instance of the Redis client as
+        a private variable name and flush the instance
+        """
+        self._redis: redis.Redis = redis.Redis()
+        self._redis.flushdb()
+
     def count_calls(method: Callable) -> Callable:
         """
         This method implements a system to count how mnay times
@@ -33,15 +41,7 @@ class Cache:
             self._redis.incr(key)
             return method(self, *args, **kwargs)
         return wrapper
-
-    def __init__(self) -> None:
-        """
-        This mehod stores an instance of the Redis client as
-        a private variable name and flush the instance
-        """
-        self._redis: redis.Redis = redis.Redis()
-        self._redis.flushdb()
-
+    
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
@@ -56,8 +56,7 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Callable = None) -> Union[
-            str, bytes, int, float]:
+    def get(self, key: str, fn: Callable = None) -> Union[str, bytes, int, float]:
         """
         This method takes a key string argument and an optiional
         Callable argument named fn.
